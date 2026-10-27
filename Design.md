@@ -115,7 +115,7 @@
 
   <img width="357.8125" height="1203.125" alt="Untitled-19" src="https://github.com/user-attachments/assets/36cac933-922d-4944-a8ad-d2a6728b86ea" />
 
-# View all Clubs
+## View all Clubs
 - This page shows a list of clubs by their logo and club name.
 
   <img width="357.8125" height="963.75" alt="Untitled-20" src="https://github.com/user-attachments/assets/cf5868a9-e5b8-4380-8622-d97068c307db" />
