@@ -2,11 +2,11 @@
 
 ## Project Overview
 
-The **s-CPD** system is a proposed Android mobile application designed to simplify the management of student co-curricular activities, event bookings, attendance, and points. The system aims to support students, club committee members, and administrators through reliable activity management, secure attendance verification, and accurate points tracking.
+The s-CPD system is an Android mobile application designed to simplify the management of student co-curricular activities, event bookings, attendance, and points. The system aims to support students, club committee members, and administrators through reliable activity management, secure attendance verification, and accurate points tracking.
 
 ## Project Proposal
 
-The main proposal outlines the project's introduction, aims and objectives, and conclusion, with links to the detailed requirements, architecture, and design sections.
+The main proposal outlines the project's introduction, aims and objectives, and conclusion, with links to the detailed requirements, system architecture, and design sections.
 
 [Read the Project Proposal](Proposal.md)                 
 
