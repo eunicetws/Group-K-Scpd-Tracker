@@ -1,40 +1,37 @@
 # Login
-- The user can choose to login as a student, committee or admin.
-- If they chose committee, they will be ask to choose from a list of active clubs.
+
+The user can login as a student or committee; committees will pick from a list of active clubs.
 
   <img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/bc3b6152-3e92-4f93-bcfa-598da2b82a7a" />
 
-- Once the user sntered their email and password, they can continue by pressing login.
-
   <img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/f8d70030-9df5-4035-8c7d-0595b02ba382" /> 
-- Dropdown <br/>
 
-    <img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/fd3a4122-0815-42ef-87b4-fb2490e878b9" />
+  <img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/fd3a4122-0815-42ef-87b4-fb2490e878b9" />
 
 # Loading
-- The loading screen will show 2 ducks and a goose.
-- When the screen is loading, the birds will appear from left to right one at a time, the dissapears from the right to the left. This will loop until the loading is finish to show the user the app still working. 
+
+Two ducks and a goose loop by appearing one at a time from left to right then disappear from right to left until loading finishes.
 
   <img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/197cfb0f-4e23-476e-a917-7f82484e1eb9" />
 
 # Offline
-- Whenever the user is offline, every page will show this screen except for the attendence page.
-- There is a quick access to scan their attendance, so the user would know at a glance that they could still take their attendance.
+
+Whenever the user is offline, every page will show this screen with quick access to scan attendance.
 
   <img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/56892d78-d252-4095-8f5e-6afcabc7a2e6" />
 
 # User Isn't Login
-- Similar to Offline, every page will show this screen except for the attendence page when the user isn't logged in.
-- By clicking on the "Go To Login" Button leads the user to the login screen.
+
+Every page will show this screen when the user isn't logged in. The "Go To Login" Button leads the user to the login screen.
 
   <img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/bdeb4e82-b5fa-43d1-b584-75b0ed61e910" />
 
 
 # Notification
-- Notifications Page
-  - This page will show all notifications message and timestamp sorted by starting from the newest notification.
-  
-    <img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/61c8ee8b-9afc-4699-9a88-e78121c0914c" />
+
+Notifications Page shows all notifications message and timestamp sorted by starting from the newest notification.
+
+  <img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/61c8ee8b-9afc-4699-9a88-e78121c0914c" />
   
 - Pop Ups
   - Normal notifications
@@ -43,111 +40,62 @@
       
   - Error
     
-      <img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/21bd6174-48e6-4eef-bd0b-7fbdf3a76e14" /> |
-
-# Calendar 
-
-- This page allows
-	- students to keep track of the events they signed up
- 	- clubs to keep track of their events
-- Events will be shown as different coloured lines under the date of the event.
-
-  <img width="357.8125" height="796.25" alt="Untitled-27" src="https://github.com/user-attachments/assets/ee9afa09-f988-4ba8-b26f-db5ded219246" />
-
-- Clicking on the month and date creates a dropdown to allow the user to change the date. 
-- When the user clicks on the coloured line, a short description of the event appears at the bottom.
-
-  <img width="357.8125" height="796.25" alt="Untitled-28" src="https://github.com/user-attachments/assets/e90263fc-6f87-4862-9167-2b1283895040" />
+      <img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/21bd6174-48e6-4eef-bd0b-7fbdf3a76e14" /> 
 
 # Students
 
 ## Discover 
 
-- This page has 3 categories: Ongoing Events, Upcoming Events, Previous Events.
-	- Ongoing Events shows events the user has registered and are currently running.
-	- Upcoming Events shows future events.
-	- Previous Events shows events the user previously joined.
-- Pressing on
-	- Category Labels brings the user to the View More page
-	- Event posters brings the user to the events
-	- Club names bring them to the Club Details page
+Shows different categories of events, tapping a category opens View More, a poster opens the event and a club name opens Club Details page
 
   <img width="357.8125" height="963.75" alt="Untitled-10" src="https://github.com/user-attachments/assets/8273f0b6-e100-4ca7-86ca-fee3e3736cc8" />
 
 
 ## View More
-- This page shows all events under the category the user chose
-- Pressing on
-	- Event posters brings the user to the events
-	- Club names bring them to the Club Details page
+Shows all events in the chosen category, which users can search and filter.
 
   <img width="357.8125" height="1482.8125" alt="Untitled-11" src="https://github.com/user-attachments/assets/f360f1ce-04c0-442e-b292-b363d4c6c6f1" />
 
-
-- User can search for events by name using the search bar at the top.
-- Pressing on the filter icon next to the search bar lists opens a pop up that shows
-	- A list of options the user can sort by, filter by and search by
-	- In search by, the user can look for clubs they wish to filter through searching for the club name and filter by the club's category
-
-   <img width="357.8125" height="796.25" alt="Untitled-12" src="https://github.com/user-attachments/assets/5a612d3f-f0f3-4df8-bead-75f0a91040ab" />
+  <img width="357.8125" height="796.25" alt="Untitled-12" src="https://github.com/user-attachments/assets/5a612d3f-f0f3-4df8-bead-75f0a91040ab" />
 
 
 ## Events Details
-- By swiping left or right on the event poster, the user can look through one poster at a time.
-- Below the Posters shows the event name, organiser and information.
-- Pessing on the club names bring them to the Club Details page
-- At the end of the page is a sign up button do user can sign up.
 
+User can swipe through posters, read event details, and sign up or cancel going to an event.
+	
   <img width="357.8125" height="963.75" alt="Untitled-10" src="https://github.com/user-attachments/assets/11180789-9158-40b6-8123-6628206aa688" />
-
-- Once the user signs up, they can cancel anytime by pressing the cancel button in the same place.
 
   <img width="357.8125" height="1482.8125" alt="Untitled-11" src="https://github.com/user-attachments/assets/984f148a-124b-49a2-8864-532e38950041" />
 
 
 ## Club Details
-- This page shows the club's logo, name details and events they hosted. 
-- User can join the club by clicking on the join button beneath the club's name.
+User can look at a club's details and join or leave it. 
 
   <img width="357.8125" height="1177.1875" alt="Untitled-18" src="https://github.com/user-attachments/assets/d87c636d-6524-4f66-be61-7806ce96ac6b" />
-
-- Once the user joins the club the Join button disappears and a leave button appears at the bottom of the screen.
 
   <img width="357.8125" height="1203.125" alt="Untitled-19" src="https://github.com/user-attachments/assets/36cac933-922d-4944-a8ad-d2a6728b86ea" />
 
 ## View all Clubs
-- This page shows a list of clubs by their logo and club name.
+
+User can view, search and sort through a list of clubs.
 
   <img width="357.8125" height="963.75" alt="Untitled-20" src="https://github.com/user-attachments/assets/cf5868a9-e5b8-4380-8622-d97068c307db" />
 
-- User can search for clubs by name using the search bar at the top.
-- Pressing on the filter icon next to the search bar lists opens a pop up that shows a list of options the user can sort by, filter by and search by.
-
 ## User Information
 
-- This page allows the user to 
-	- verify if their personal information is correct
-	- keep track of their Scpd points 
-	- keep track of the events they signed up or joined. 
-- Sign out is place at the bottom to prevent user from pressing it accidentally.
+User can verify their personal information, keep track of s-CPD points and events joined and sign out. 
 
   <img width="357.8125" height="1145" alt="Untitled-26" src="https://github.com/user-attachments/assets/ecb4aaca-0e3e-4643-8325-7371983e4c89" />
 
 ## Taking Attendance
-- In this page the app will open a camera with a guideline on where the QR code should be. 
-- The top right corner shows the number of pending attendance, pressing on it leads to the Attendance History page. 
+
+Users scan a QR or enter a code, then confirm with a thumbprint to verify attendance. The pending attendance count leads to the Attendance History page. 
 
   <img width="357.8125" height="796.25" alt="Untitled-34" src="https://github.com/user-attachments/assets/978bb751-7715-4b5b-b305-26a89b7eca5c" />
 
-- The user can also switch to using code with the ‘Code’ label below the camera. 
-
   <img width="357.8125" height="796.25" alt="Untitled-35" src="https://github.com/user-attachments/assets/8dd21696-b7b6-4115-89a9-1896302c255f" />
 
-- Once the QR is scanned, it will bring the user to the loading screen. 
-
   <img width="357.8125" height="796.25" alt="Untitled-36" src="https://github.com/user-attachments/assets/513d3b41-c128-4866-8818-372e84bb5d75" />
-
-- When the information from the QR is retrieved, the user is asked for their thumbprint and will be shown if the attendance is verified.
 
   <img width="357.8125" height="796.25" alt="Untitled-37" src="https://github.com/user-attachments/assets/07bc336e-d59d-4bfd-bffd-e8674e16a5ca" />
 
@@ -161,135 +109,92 @@
 
 ## Attendance History
 
-- This page shows the user’s attendance history. 
-- When a new attendance is taken, it will be marked as “Pending”. 
-- Once the attendance is verified it will either be marked as “Success” or “Failed”.
+Shows the user’s attendance history. Record shows “Success”, "Pending" or “Failed”. Tap a failed one to see why.
 
   <img width="357.8125" height="796.25" alt="Untitled-41" src="https://github.com/user-attachments/assets/85362c96-ce36-4925-b28d-0fc58a54e961" />
-
-- Pressing on a failed attendance will show the reason for the failure.
 
   <img width="357.8125" height="796.25" alt="Untitled-42" src="https://github.com/user-attachments/assets/536b183b-15ea-4d42-99ba-85267a2a0443" />
 
 # Clubs
 ## Events 
 
-- This page has 4 categories: Drafts, Pending Approval, Approved and Denied.
-	- Drafts are events that have not been sent for approval
- 	- Pending Approval are events that have yet to be approval
-  	- Approved are events that have been approved
-  	- Denied are events that have been denied
-- Pressing on
-	- Category Labels brings the user to the View More page
-	- Event posters brings the user to the events
+Shows draft, pending approval, approved and denied events; tapping a category opens View More and a poster opens the event details.
 
-	<img width="329.6" height="1032.8" alt="image" src="https://github.com/user-attachments/assets/fe7976d2-1238-4359-8714-cf30c70a9fb2" />
-
+  <img width="329.6" height="1032.8" alt="image" src="https://github.com/user-attachments/assets/fe7976d2-1238-4359-8714-cf30c70a9fb2" />
 
 ## View More
 
-- This page shows all events under the category the user chose
-- Pressing on the event posters brings the user to the events
+Shows all events in a category, with search and sort.
 
-	<img width="329.6" height="908.8" alt="image" src="https://github.com/user-attachments/assets/80c13ae9-875f-4e72-b965-07e8f5e04cb0" />
+  <img width="329.6" height="908.8" alt="image" src="https://github.com/user-attachments/assets/80c13ae9-875f-4e72-b965-07e8f5e04cb0" />
 
-
-- User can search for events by name using the search bar at the top.
-- Pressing on the filter icon next to the search bar lists opens a pop up that shows a list of options the user can sort by.
-
-   <img width="329.6" height="908.8" alt="image" src="https://github.com/user-attachments/assets/85c7b87f-e438-4e7e-a346-f0982cef812c" />
+  <img width="329.6" height="908.8" alt="image" src="https://github.com/user-attachments/assets/85c7b87f-e438-4e7e-a346-f0982cef812c" />
 
 
-## Commitee 
+## Committee & Members
 
-- This page shows the club's committee's name, student id and position
-- User can search for committees using their name and student id
-- Committees can be added using the add button next to the search button
-- The user can switch to view members using the member tab below
+A searchable list of committee or members, depending on the tab below, with buttons to add committee or remove member.
 
-	<img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/a010996f-4388-4cdf-a5e8-83d156c7bd60" />
+  <img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/a010996f-4388-4cdf-a5e8-83d156c7bd60" />
 
-## Member
-
-- This page shows the club's member's name and student id
-- User can search for members using their name and student id
-- Member can be remove using the remove button next to the search button
-- The user can switch to view committee using the committee tab below
-
-	<img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/52bd3a25-483b-4bd8-b5d4-572864e6b667" />
-
-## Club Statistic
-- This page shows the overall performance of event per moth and year
-	<img width="329.6" height="1223.2" alt="image" src="https://github.com/user-attachments/assets/b4f51dac-f9de-4721-beaf-0ddeff6d6a16" />
+  <img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/52bd3a25-483b-4bd8-b5d4-572864e6b667" />
 
 ## Club Details
-- This page shows the club's logo, description and events held
-- The user can edit
-	- the logo by pressing on the logo and choosing the preffered image
-	- the description by pressing on the edit button 
+Shows the club details which users can edit.
 
-	<img width="329.6" height="1084.8" alt="image" src="https://github.com/user-attachments/assets/d4ec6392-669f-43fb-8060-925fae8185e8" />
+  <img width="329.6" height="1084.8" alt="image" src="https://github.com/user-attachments/assets/d4ec6392-669f-43fb-8060-925fae8185e8" />
 
 ## Event Details
-- When drafting the event, the user can add posters and event details.
-- Above the dark blue line are the event details the students can view.
-- Below the dark blue line the user are the event informations and documents only visible to the admins
+Draft an event by adding posters and event details.
 
-	<img width="329.6" height="1675.2" alt="image" src="https://github.com/user-attachments/assets/031fa23e-1d17-472a-965e-9238541ec097" />
+  <img width="329.6" height="1675.2" alt="image" src="https://github.com/user-attachments/assets/031fa23e-1d17-472a-965e-9238541ec097" />
 
-- Once the pressed submit, the approval status will appear at the top.
-- In pending the user will still be able to edit event informations to resubmit or cancel the event entirely.
+After submitting, approval status appears on top.
 
-	<img width="329.6" height="1699.2" alt="image" src="https://github.com/user-attachments/assets/7f74e945-adaf-4244-9cfa-47818d226ff3" />
+  <img width="329.6" height="1699.2" alt="image" src="https://github.com/user-attachments/assets/7f74e945-adaf-4244-9cfa-47818d226ff3" />
 
-
-- When the event is denied, the user could view the comments by the admin to make appropriate changes before resubmitting.
-- The information of the admin in charge will be place at the bottom.
-
-	<img width="329.6" height="1881.6" alt="image" src="https://github.com/user-attachments/assets/e56a65a6-7fad-4781-a1d5-a4c822bfd1b2" />
-
-
-- When the event is approved, the user could cancel the event by pressing the cancel event button at the bottom of the page.
+ Denied and approved events contain comments from admin. Once an event is approved the event can no longer be edited and the footer will change.
+  <img width="329.6" height="1881.6" alt="image" src="https://github.com/user-attachments/assets/e56a65a6-7fad-4781-a1d5-a4c822bfd1b2" />
 
   <img width="329.6" height="1876" alt="image" src="https://github.com/user-attachments/assets/f6e4df74-34db-4a2f-b906-d9da6d272ef8" />
 
-- Once an event is approved, the event's page footer will change into the
-	- Information page
-		- This page is the approved Event Details page
-   
- 	- Attendance page
-  		- Check In and Check Out each has their unique rotating qr and code. User can switch between the two on the tab above the header.
-    
-      		<img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/8b57d7a5-710f-4255-9149-3d85a5caf960" />
-			<img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/81199a8d-50fe-4c0e-9bef-ce1309c1b3a7" />
+### Event Attendance page
+Switch between tabs for different rotating QR and code for Check In and Check Out. 
+
+  <img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/8b57d7a5-710f-4255-9149-3d85a5caf960" />
+	
+  <img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/81199a8d-50fe-4c0e-9bef-ce1309c1b3a7" />
 			
-	- Sign Up page
- 		- This page shows the name and student is of sign ups
-   		- User can search sign ups by name and student id or remove any sign up
- 
-       		<img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/951f9d58-5da9-4dd3-a80a-0cdb7d7b11e1" />
+### Sign Up page
+List of the name and student ID of sign ups that can be searched or removed. 
 
-    - Participant page
-    	- This page shows the name, student id, and when the participants sign in or out	
-		- The user can add or edit the participant information
+  <img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/951f9d58-5da9-4dd3-a80a-0cdb7d7b11e1" />
 
-	  		<img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/5c0803ce-f685-4cc2-8749-5ebe4924df3d" />
-			<img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/89f77115-2b74-4a7e-a58c-85454f746454" />
+#### Participant page
+List of participants' name, student ID, and when they sign in or out; participants' information can be added or edited.
+		
+  <img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/5c0803ce-f685-4cc2-8749-5ebe4924df3d" />
+  <img width="329.6" height="733.6" alt="image" src="https://github.com/user-attachments/assets/89f77115-2b74-4a7e-a58c-85454f746454" />
 
-	- Event Statistic Page
- 		- Shows the event's current statistic on views, sign ups and participants
-     
-     		<img width="329.6" height="1044.8" alt="image" src="https://github.com/user-attachments/assets/e932da66-1767-4e9a-b2c8-8617ba86a815" />
+# New Features
+## Calendar 
 
+This page allows
+- students to keep track of the events they signed up for
+- clubs to keep track of their events
 
+Events will be shown as different coloured lines under the date of the event.
 
+  <img width="357.8125" height="796.25" alt="Untitled-27" src="https://github.com/user-attachments/assets/ee9afa09-f988-4ba8-b26f-db5ded219246" />
 
+  <img width="357.8125" height="796.25" alt="Untitled-28" src="https://github.com/user-attachments/assets/e90263fc-6f87-4862-9167-2b1283895040" />
 
-    	
+## Statistic
+Shows the overall performance of
+- events per month and year
 
-  
+	<img width="329.6" height="1223.2" alt="image" src="https://github.com/user-attachments/assets/b4f51dac-f9de-4721-beaf-0ddeff6d6a16" />
+	
+- an event's views, sign ups and participants
 
-
-
-
-
+	<img width="329.6" height="1044.8" alt="image" src="https://github.com/user-attachments/assets/e932da66-1767-4e9a-b2c8-8617ba86a815" />
