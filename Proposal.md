@@ -32,15 +32,8 @@ The project aims to achieve the following objectives:
 
 **7\. Attendance monitoring and problem handling**: Show students the status of their attendance records, explain why records are rejected, and allow suspicious records or special cases to be reviewed.
 
-## 3\. Group Members
 
-| Name                  | Student ID | GitHub Username    |
-|-----------------------|------------|--------------------|
-| Wei Sin Tan           | 20619586   | eunicetws          |
-| Tian Cheng Song       | 20595032   | bernut420          |
-| Rebecca Anita Pereira | 20619091   | Rebecca-Nottingham |
-
-## 4\. Proposal Structure
+## 3\. Proposal Structure
 
 The following sections explain the proposed s-CPD system in more detail:
 
@@ -50,7 +43,7 @@ The following sections explain the proposed s-CPD system in more detail:
   
 - [App Design and UI States](Design.md)
 
-## 5\. Conclusion
+## 4\. Conclusion
 
 In conclusion, the proposed s-CPD system aims to provide a single platform for managing student activities, event bookings, attendance, and co-curricular points. Features such as event approval, QR-code check-ins, biometric verification, and registered-device checks are intended to reduce false attendance records and ensure that students receive points for activities they have actually attended.
 
