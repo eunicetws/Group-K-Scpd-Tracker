@@ -2,22 +2,27 @@
 
 The app uses a hybrid client-cloud architecture separating the Club Organizer Client and Student Client from the Central Cloud Backend.
 
-**Authentication and Unified Client**
+<img width="2200" height="1120" alt="system-architechture- diagram" src="https://github.com/user-attachments/assets/957f4370-6e38-4625-906c-f9567b2bd048" />
+
+**1. Authentication and Unified Client**
 - **Firebase Auth**: Manages sign-in and issues tokens with role claims
 - **Unified App**: A single Android app adapts its UI based on the user's role, while backend security rules apply strict permission boundaries.
 
-**Offline vs. Online Execution Paths**
+**2. Offline vs. Online Execution Paths**
 - **Offline Path**: When there’s no connection environments, student attendance scans are cryptographically signed and stored locally via Room and WorkManager on the student's device, ensuring no data loss.
 - **Online Path**: Once connection returns, WorkManager automatically pushes pending records to the cloud.
 
-**Direction of Trust & Backend Validation**
+**3. Direction of Trust & Backend Validation**
 - **Untrusted Client Boundary**: The client can request actions, but the backend holds all power. Cloud Functions independently re-verify cryptographic signatures, rotating session tokens (accepting a 10–20 second window for active token transitions), event windows, and booking eligibility before updating the database or awarding any points.
 
-**Backend-Managed Approvals & Security**
+**4. Backend-Managed Approvals & Security**
 - **Admin Approvals**: Event state transitions (Draft -> Pending_Approval -> Approved) are managed via the backend database console (no separate admin UI).
 - **Firestore Rules**: The server stops users from upgrading their accounts, approving their own events, or changing the PointLedger.
 
 ## Data Model / ER Diagram Entities
+
+<img width="2780" height="1930" alt="er-diagram" src="https://github.com/user-attachments/assets/0080f4d1-220b-417a-adaf-0c586b0f910e" />
+
 The relational data model has seven core entities:
 - **Users**: Stores user profiles, Firebase Auth UIDs, role flags, and registered device public keys for attendance verification and device restriction.
 - **Clubs**: Links club organizers to their respective campus organizations and metadata.
@@ -29,25 +34,27 @@ The relational data model has seven core entities:
 
 ### Database & Backend Integrity Rules 
 
-**Unique Student Bookings**: Students can only book an event once, which is blocked by deterministic booking IDs and backend transactions. 
+**1. Unique Student Bookings**: Students can only book an event once, which is blocked by deterministic booking IDs and backend transactions. 
 
-**Event Capacity Enforcement**: Event capacity is checked actively to stop over-booking. Once an event is APPROVED, it’s details (time, venue, points) cannot be changed, without submitting it again.
+**2. Event Capacity Enforcement**: Event capacity is checked actively to stop over-booking. Once an event is APPROVED, it’s details (time, venue, points) cannot be changed, without submitting it again.
 
-**Attendance & Point Uniqueness**: Stops repeat reward payouts by checking that the PointLedger is not already mapped to a given AttendanceID. 
+**3. Attendance & Point Uniqueness**: Stops repeat reward payouts by checking that the PointLedger is not already mapped to a given AttendanceID. 
 
-**Booking Ownership Verification**: The student scanning the QR code must match the student ID on the event booking record. 
+**4. Booking Ownership Verification**: The student scanning the QR code must match the student ID on the event booking record. 
 
-**Two-Tap / Attendance Duration Rule**: Backend validation confirms both an IN (CheckInAt) and OUT (CheckOutAt) record tracking if it lasted long enough before awarding points. 
+**5. Two-Tap / Attendance Duration Rule**: Backend validation confirms both an IN (CheckInAt) and OUT (CheckOutAt) record tracking if it lasted long enough before awarding points. 
 
-**Role-Based Club Management**: only approved club organizers linked through the Clubs table can create, submit, or manage events for their club. 
+**6. Role-Based Club Management**: only approved club organizers linked through the Clubs table can create, submit, or manage events for their club. 
 
-**Auditable Point Traceability**: Points use an append-only ledger, meaning that every transaction must link back to a verified AttendanceID or an approved reason, instead of just changing a balance number. 
+**7. Auditable Point Traceability**: Points use an append-only ledger, meaning that every transaction must link back to a verified AttendanceID or an approved reason, instead of just changing a balance number. 
 
-**Admin Approvals**: Admins approve events directly in the backend database console, so a separate admin UI or screen is not needed. 
+**8. Admin Approvals**: Admins approve events directly in the backend database console, so a separate admin UI or screen is not needed. 
 
-**Firestore Rules**: The server blocks users from upgrading their accounts, approving their own events, or tampering with the permanent PointLedger.
+**9. Firestore Rules**: The server blocks users from upgrading their accounts, approving their own events, or tampering with the permanent PointLedger.
 
 ## Offline Sync Strategy
+
+<img width="1998" height="8192" alt="Attendance-flow-diagram" src="https://github.com/user-attachments/assets/141e2188-fbd4-4bec-b59e-f05510334c3a" />
 
 To fulfil requirement R4, the app uses a decentralized local-first queuing pattern using Room and Android WorkManager.
 
