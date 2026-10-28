@@ -8,7 +8,7 @@ The s-CPD system is an Android mobile application designed to simplify the manag
 
 The main proposal outlines the project's introduction, aims and objectives, and conclusion, with links to the detailed requirements, system architecture, and design sections.
 
-[Read the Project Proposal](Proposal.md)                 
+[Read the Project Proposal](docs/Proposal.md)                 
 
 ## Group Members
 
