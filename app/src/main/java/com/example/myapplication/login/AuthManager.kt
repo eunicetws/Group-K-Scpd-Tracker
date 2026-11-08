@@ -11,15 +11,13 @@ object AuthManager {
     private val auth: FirebaseAuth
         get() = FirebaseAuth.getInstance()
 
-    //
     val currentUser: FirebaseUser?
         get() = auth.currentUser
 
     fun isLoggedIn(): Boolean = auth.currentUser != null
 
-    // Create account (test)
     fun signUp(email: String, password: String, name: String, result: (Boolean, String?) -> Unit) {
-        // Stop BEFORE the account is created if there is no name
+
         if (name.isBlank()) {
             result(false, "Name is required")
             return
@@ -54,7 +52,6 @@ object AuthManager {
         name: String,
         result: (Boolean, String?) -> Unit
     ) {
-        // Stop BEFORE the account is created if there is no name
         if (name.isBlank()) {
             result(false, "Name is required")
             return
@@ -74,13 +71,12 @@ object AuthManager {
                     result(false, "Unknown error")
                     return@addOnSuccessListener
                 }
-                // Saved through the secondary connection, while it is logged in as the new user
                 saveUser(FirebaseFirestore.getInstance(firebase), newUser.uid, name, email) { ok, error ->
                     if (ok) {
-                        NFirebase.signOut()   // you stay logged in
+                        NFirebase.signOut()   // admin is still logged in
                         result(true, newUser.uid)
                     } else {
-                        // Name could not be saved: remove the account so the email isn't left registered
+                        // If name isn't saved remove the account
                         newUser.delete().addOnCompleteListener {
                             NFirebase.signOut()
                             result(false, error)
