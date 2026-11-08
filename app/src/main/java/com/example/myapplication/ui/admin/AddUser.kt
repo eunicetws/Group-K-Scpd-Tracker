@@ -14,7 +14,6 @@ import androidx.compose.ui.unit.dp
 import com.example.myapplication.login.AuthManager
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
-// UI only: text boxes, a button and a message. The Firebase code is in login/AuthManager.kt
 @Composable
 fun AddUser(modifier: Modifier = Modifier) {
     val context = LocalContext.current
@@ -96,6 +95,6 @@ fun AddUser(modifier: Modifier = Modifier) {
 @Composable
 fun AddUserPreview() {
     MyApplicationTheme {
-        AddUser(modifier = Modifier.padding(16.dp))
+        AddUser()
     }
 }
