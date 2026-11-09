@@ -11,6 +11,8 @@ import androidx.compose.runtime.saveable.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.*
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.*
@@ -76,8 +78,8 @@ fun LoginPage(
                 Label("Login as:")
                 Dropdown(
                     selected = role.label,
-                    options = Role.entries.map { it.label },
-                    onSelect = { label -> role = Role.entries.first { it.label == label } },
+                    options = Role.entries.map { r -> r.label },
+                    onSelect = { label -> role = Role.entries.first { r -> r.label == label } },
                     background = Color.LightGray,
                     modifier = Modifier.width(250.dp)
                 )
@@ -117,12 +119,16 @@ fun LoginPage(
                         }
                         loading = true
                         message = ""
-                        AuthManager.logIn(email, password) { success, error ->
+                        AuthManager.logIn(role, email, password) { success, error ->
                             loading = false
                             if (success) {
                                 onLoginSuccess(role)
                             } else {
-                                message = "Incorrect Email or Password"
+                                if (error != null) {
+                                    message = error
+                                } else {
+                                    message = "Login failed"
+                                }
                             }
                         }
                     },
@@ -231,12 +237,15 @@ private fun Dropdown(
 ) {
     var expanded by remember { mutableStateOf(false) }
     val shape = RoundedCornerShape(50)
+    var dropdownWidth by remember { mutableStateOf(0.dp) }
+    val density = LocalDensity.current
 
     Box(modifier = modifier) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(40.dp)
+                .onSizeChanged { size -> dropdownWidth = with(density) { size.width.toDp() } }
                 .clip(shape)
                 .background(background)
                 .border(border, shape)
@@ -262,7 +271,9 @@ private fun Dropdown(
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.width(250.dp),
+            modifier = Modifier
+                .width(dropdownWidth)
+                .heightIn(max = 200.dp),
             containerColor = Color(0xFFDCE6F2)
         ) {
             options.forEach { option ->
