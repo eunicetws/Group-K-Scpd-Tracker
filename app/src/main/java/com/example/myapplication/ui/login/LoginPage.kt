@@ -98,7 +98,8 @@ fun LoginPage(
                 TextBox(
                     state = emailState,
                     keyboardType = KeyboardType.Email,
-                    modifier = Modifier.width(250.dp)
+                    modifier = Modifier.width(250.dp),
+                    imeAction = ImeAction.Next
                 )
 
                 Label("Password:")
@@ -106,7 +107,8 @@ fun LoginPage(
                     state = passwordState,
                     keyboardType = KeyboardType.Password,
                     modifier = Modifier.width(250.dp),
-                    isPrivate = true
+                    isPrivate = true,
+                    imeAction = ImeAction.Done
                 )
 
                 Button(
@@ -185,7 +187,8 @@ private fun TextBox(
     state: TextFieldState,
     keyboardType: KeyboardType,
     modifier: Modifier = Modifier,
-    isPrivate: Boolean = false
+    isPrivate: Boolean = false,
+    imeAction: ImeAction = ImeAction.Default
 ) {
     val textStyle = TextStyle(
         color = Color.Black,
@@ -193,7 +196,12 @@ private fun TextBox(
         fontFamily = Roboto,
         textAlign = TextAlign.Center
     )
-    val keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
+    val keyboardOptions = KeyboardOptions(
+        keyboardType = keyboardType,
+        imeAction = imeAction
+    )
+
+    var showPassword by remember { mutableStateOf(false) }
 
     val textBoxUi = TextFieldDecorator { innerTextField ->
         Box(
@@ -203,7 +211,25 @@ private fun TextBox(
                 .border(2.dp, Navy, RoundedCornerShape(50))
                 .padding(horizontal = 16.dp),
             contentAlignment = Alignment.Center
-        ) { innerTextField() }
+        ) {
+            if (isPrivate) {
+                // Show and hide password
+                Box(modifier = Modifier.padding(horizontal = 24.dp)) { innerTextField() }
+                Icon(
+                    painter = painterResource(
+                        if (showPassword) R.drawable.icon_eye_open else R.drawable.icon_eye_close
+                    ),
+                    contentDescription = if (showPassword) "Hide password" else "Show password",
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .size(20.dp)
+                        .clickable { showPassword = !showPassword },
+                    tint = Color.Unspecified
+                )
+            } else {
+                innerTextField()
+            }
+        }
     }
 
     if (isPrivate) {
@@ -212,6 +238,7 @@ private fun TextBox(
             modifier = modifier,
             textStyle = textStyle,
             keyboardOptions = keyboardOptions,
+            textObfuscationMode = if (showPassword) TextObfuscationMode.Visible else TextObfuscationMode.RevealLastTyped,
             decorator = textBoxUi
         )
     } else {
