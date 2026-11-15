@@ -2,9 +2,16 @@
 
 ## 1\. Introduction
 
-The Student Co-Curricular Points and Development (s-CPD) system is an Android application designed to make it easier to manage student activities, event bookings, attendance, and co-curricular points. The system has three types of users: students, club committee members, and s-CPD administrators. Students can browse approved events, book places, record attendance, and check their points history. Club committee members can create and manage events, request points for activities, and track participation, while administrators review and approve events and check attendance and points records. The system's main goal is to make sure s-CPD points are awarded fairly, even when the internet connection is unreliable. 
+Student Co-Curricular Points and Development (s-CPD) is a structured scheme used at the University of Nottingham Malaysia (UNM) to encourage, record and reward student participation in co-curricular and professional development activities.
+Currently, event submission and approval is a long and tedious process, while attendance is recorded manually on paper or Excel sheets. 
+As a result, points are often delayed or missed for students.
 
-This proposal describes the system's requirements, architecture, and design as a foundation for its future development and testing.
+To make this process faster and more reliable, we propose the s-CPD Tracker, an Android application designed to manage student activities, event bookings, attendance and co-curricular points. 
+The system has three types of users: students, club committee members and s-CPD administrators. 
+Students can browse approved events, book places, record attendance and check their point history. 
+Club committee members can create and manage events, request points for activities and track participation, 
+while administrators review and approve events and check attendance and points records. 
+The system’s main goal is to make sure s-CPD points are awarded fairly, even when the internet connection is unreliable.
 
 ## 2\. Project Aims and Objectives
 
@@ -16,13 +23,13 @@ The aim of the s-CPD project is to develop an Android application that simplifie
 
 The project aims to achieve the following objectives:
 
-1. Allow club committee members to create and manage events and request points, administrators to approve or reject events, and students to find approved events, book available places, avoid schedule clashes and receive event notifications.
+1. Make event management easier for clubs and event approval easier for administrators. 
 
-2. Use QR codes, biometric verification and registered devices to prevent fake or unauthorised check-ins, while allowing students to record attendance offline and upload it when the connection returns, see the status of each record and why it was rejected, and have suspicious records or special cases reviewed.
+2. Record attendance reliably and prevent fake check-ins while still supporting taking attendance offline
 
-3. Award points only for verified attendance, and keep a record of every point awarded, changed or removed, with the reason for each change.
+3. Award points fairly, with every change recorded.
 
-4. Give students, club committee members and administrators separate permissions to prevent unauthorised actions and changes to records.
+4. Protect records and data by giving each type of user only the access they need.
 
 ## 3\. Proposal Structure
 
@@ -36,4 +43,6 @@ The following sections explain the proposed s-CPD system in more detail:
 
 ## 4\. Conclusion
 
-In conclusion, the proposed s-CPD system gives students, club committees and administrators a single platform for managing events, bookings, attendance and co-curricular points. Verified check-ins, offline attendance recording and a full history of points changes help ensure that points are awarded fairly and only for activities students have actually attended. The requirements, architecture and design set out in this proposal will guide the development and testing of a more reliable and accountable co-curricular management system.
+In conclusion, the s-CPD Tracker aims to make co-curricular points simpler and more reliable.
+Clubs can manage events, and students can find and book them, all in one app on their phones.
+Lastly, event attendance will be harder to cheat and can be recorded even without an internet connection.
