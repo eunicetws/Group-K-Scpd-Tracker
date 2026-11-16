@@ -29,6 +29,11 @@
             android:exported="false"
             android:theme="@style/Theme.MyApplication" />
 
+        <activity
+            android:name=".ui.events.CreateEventTestActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MyApplication" />
+
     </application>
 
 </manifest>
