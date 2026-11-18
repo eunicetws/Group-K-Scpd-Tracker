@@ -7,16 +7,21 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import com.example.myapplication.R
+import com.example.myapplication.courses.Course
+import com.example.myapplication.courses.CourseManager
+import com.example.myapplication.courses.SchoolManager
+import com.example.myapplication.courses.School
 import com.example.myapplication.login.AuthManager
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
@@ -27,6 +32,8 @@ fun AddUser(modifier: Modifier = Modifier) {
     var name by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var year by rememberSaveable { mutableStateOf("") }
+
     var message by remember { mutableStateOf("") }
     var saving by remember { mutableStateOf(false) }
 
@@ -34,16 +41,59 @@ fun AddUser(modifier: Modifier = Modifier) {
     var clubId by rememberSaveable { mutableStateOf<String?>(null) }
     var clubSearch by rememberSaveable { mutableStateOf("") }
     var clubDropdown by remember { mutableStateOf(false) }
-    var clubFieldWidth by remember { mutableStateOf(0.dp) }
-    val density = LocalDensity.current
     val noneChosen = clubSearch.trim().equals("None", ignoreCase = true)
-    val searchText = if (noneChosen) "" else clubSearch.trim()
-    val clubMatches = clubs.filter { club -> club.second.contains(searchText, ignoreCase = true) }
+    var searchText = clubSearch.trim()
+    if (noneChosen) {
+        searchText = ""
+    }
+    // only clubs that match what's typed
+    val clubMatches = mutableListOf<Pair<String, String>>()
+    for (club in clubs) {
+        if (club.second.contains(searchText, ignoreCase = true)) {
+            clubMatches.add(club)
+        }
+    }
+
+    var schools by remember { mutableStateOf<List<School>>(emptyList()) }
+    var schoolCode by rememberSaveable { mutableStateOf<String?>(null) }
+    var schoolSearch by rememberSaveable(stateSaver = TextFieldValue.Saver) { mutableStateOf(TextFieldValue("")) }
+    var schoolDropdown by remember { mutableStateOf(false) }
+    val schoolSearchText = schoolSearch.text.trim()
+    // school already picked: show all schools, still typing: only schools that match
+    val schoolMatches = mutableListOf<School>()
+    for (school in schools) {
+        if (schoolCode != null) {
+            schoolMatches.add(school)
+        } else if ((school.schoolID + " - " + school.schoolName).contains(schoolSearchText, ignoreCase = true)) {
+            schoolMatches.add(school)
+        }
+    }
+
+    var courseId by rememberSaveable { mutableStateOf<String?>(null) }
+    var courseSearch by rememberSaveable { mutableStateOf("") }
+    var courseDropdown by remember { mutableStateOf(false) }
+    val courseSearchText = courseSearch.trim()
+    var schoolCourses by remember { mutableStateOf<List<Course>>(emptyList()) } // courses of the chosen school
+    // only courses that match what's typed
+    val courseMatches = mutableListOf<Course>()
+    for (course in schoolCourses) {
+        if ((course.courseID + " - " + course.courseName).contains(courseSearchText, ignoreCase = true)) {
+            courseMatches.add(course)
+        }
+    }
 
     LaunchedEffect(Unit) {
         AuthManager.getClubs { list, error ->
             clubs = list
-            if (error != null) message = "Could not load clubs: $error"
+            if (error != null) {
+                message = "Could not load clubs: $error"
+            }
+        }
+        SchoolManager.getSchools(activeFilter = true) { list, error ->
+            schools = list
+            if (error != null) {
+                message = "Could not load schools: $error"
+            }
         }
     }
 
@@ -59,6 +109,7 @@ fun AddUser(modifier: Modifier = Modifier) {
                 onValueChange = { newName -> name = newName },
                 label = { Text("Name") },
                 singleLine = true,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -67,7 +118,7 @@ fun AddUser(modifier: Modifier = Modifier) {
                 onValueChange = { newEmail -> email = newEmail },
                 label = { Text("Email") },
                 singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -77,7 +128,177 @@ fun AddUser(modifier: Modifier = Modifier) {
                 label = { Text("Password (min 6 characters)") },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Next),
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Box {
+                OutlinedTextField(
+                    value = schoolSearch,
+                    onValueChange = { newSearch ->
+                        // only clear the school if the text changed, not just the cursor/highlight
+                        if (newSearch.text != schoolSearch.text) {
+                            schoolCode = null
+                            schoolDropdown = true
+                        }
+                        schoolSearch = newSearch
+                    },
+                    label = { Text("School") },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                    placeholder = { Text("School") },
+                    trailingIcon = { //Click v to open dropdown
+                        IconButton(onClick = {
+                            schoolDropdown = !schoolDropdown
+                        }) {
+                            Icon(
+                                painter = painterResource(R.drawable.icon_arrowdown),
+                                contentDescription = "Show schools",
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                    },
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onFocusChanged { focus ->
+                            if (focus.isFocused) {
+                                // highlight the whole school name so typing replaces it
+                                schoolSearch = schoolSearch.copy(selection = TextRange(0, schoolSearch.text.length))
+                            } else {
+                                schoolDropdown = false
+                            }
+                        }
+                )
+
+                DropdownMenu(
+                    expanded = schoolDropdown,
+                    onDismissRequest = { schoolDropdown = false },
+                    properties = PopupProperties(focusable = false, dismissOnClickOutside = false),
+                    modifier = Modifier.heightIn(max = 200.dp)
+                ) {
+                    for ((code, name1) in schoolMatches) { // show school and record school code
+                        DropdownMenuItem(
+                            text = { Text("$code - $name1") },
+                            onClick = {
+                                if (code != schoolCode) { // new school, clear old course
+                                    courseId = null
+                                    courseSearch = ""
+                                    schoolCourses = emptyList()
+                                }
+                                schoolCode = code
+                                schoolSearch = TextFieldValue("$code - $name1")
+                                schoolDropdown = false
+                            }
+                        )
+                    }
+                    if (schoolMatches.isEmpty() && schoolSearchText.isNotBlank()) { // nothing matches what's typed
+                        DropdownMenuItem(
+                            text = { Text("No matching school") },
+                            onClick = {},
+                            enabled = false
+                        )
+                    }
+                }
+            }
+
+            Box {
+                OutlinedTextField(
+                    value = courseSearch,
+                    onValueChange = { newSearch ->
+                        courseSearch = newSearch
+                        courseId = null
+                        if (!courseDropdown) { // only load when the dropdown opens, not every letter
+                            CourseManager.getCourse(schoolID = schoolCode, activeFilter = true) { list, error ->
+                                schoolCourses = list
+                                if (error != null) {
+                                    message = "Could not load courses: $error"
+                                }
+                            }
+                        }
+                        courseDropdown = true
+                    },
+                    label = { Text("Course") },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                    placeholder = {
+                        if (schoolCode == null) {
+                            Text("Choose a school first")
+                        } else {
+                            Text("Course name")
+                        }
+                    },
+                    trailingIcon = { //Click v to open dropdown
+                        IconButton(onClick = {
+                            if (courseDropdown) {
+                                courseDropdown = false
+                            } else {
+                                CourseManager.getCourse(schoolID = schoolCode, activeFilter = true) { list, error ->
+                                    schoolCourses = list
+                                    if (error != null) {
+                                        message = "Could not load courses: $error"
+                                    }
+                                }
+                                courseDropdown = true
+                            }
+                        }, enabled = schoolCode != null) {
+                            Icon(
+                                painter = painterResource(R.drawable.icon_arrowdown),
+                                contentDescription = "Show courses",
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                    },
+                    enabled = schoolCode != null, // need a school before picking a course
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onFocusChanged { focus ->
+                            if (!focus.isFocused) {
+                                courseDropdown = false
+                            }
+                        }
+                )
+
+                DropdownMenu(
+                    expanded = courseDropdown,
+                    onDismissRequest = { courseDropdown = false },
+                    properties = PopupProperties(focusable = false, dismissOnClickOutside = false),
+                    modifier = Modifier.heightIn(max = 200.dp)
+                ) {
+                    for ((id, name1) in courseMatches) {
+                        DropdownMenuItem(
+                            text = { Text("$id - $name1") },
+                            onClick = {
+                                courseId = id
+                                courseSearch = "$id - $name1"
+                                courseDropdown = false
+                            }
+                        )
+                    }
+                    if (courseMatches.isEmpty() && courseSearchText.isNotBlank()) { // nothing matches what's typed
+                        DropdownMenuItem(
+                            text = { Text("No matching course") },
+                            onClick = {},
+                            enabled = false
+                        )
+                    }
+                }
+            }
+
+            OutlinedTextField(
+                value = year,
+                onValueChange = { newYear ->
+                    // keep numbers only
+                    var digits = ""
+                    for (letter in newYear) {
+                        if (letter.isDigit()) {
+                            digits += letter
+                        }
+                    }
+                    year = digits
+                },
+                label = { Text("Year") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -90,9 +311,12 @@ fun AddUser(modifier: Modifier = Modifier) {
                         clubDropdown = true
                     },
                     label = { Text("Club") },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done), // last box
                     placeholder = { Text("Club name") },
                     trailingIcon = { //Click v to open dropdown
-                        IconButton(onClick = { clubDropdown = !clubDropdown }) {
+                        IconButton(onClick = {
+                            clubDropdown = !clubDropdown
+                        }) {
                             Icon(
                                 painter = painterResource(R.drawable.icon_arrowdown),
                                 contentDescription = "Show clubs",
@@ -103,18 +327,18 @@ fun AddUser(modifier: Modifier = Modifier) {
                     singleLine = true,
                     modifier = Modifier
                         .fillMaxWidth()
-                        // size change according to textbox size
-                        .onSizeChanged { size -> clubFieldWidth = with(density) { size.width.toDp() } }
-                        .onFocusChanged { focus -> if (!focus.isFocused) clubDropdown = false } //if focus not on club, close dropdown
+                        .onFocusChanged { focus ->
+                            if (!focus.isFocused) { //if focus not on club, close dropdown
+                                clubDropdown = false
+                            }
+                        }
                 )
 
                 DropdownMenu(
                     expanded = clubDropdown,
                     onDismissRequest = { clubDropdown = false },
                     properties = PopupProperties(focusable = false, dismissOnClickOutside = false), //so keyboard or popup don't keep closing when typing
-                    modifier = Modifier
-                        .width(clubFieldWidth)
-                        .heightIn(max = 200.dp)
+                    modifier = Modifier.heightIn(max = 200.dp)
                 ) {
                     DropdownMenuItem( // if text is none, shows none and club id has nothing
                         text = { Text("None") },
@@ -154,16 +378,38 @@ fun AddUser(modifier: Modifier = Modifier) {
                         message = "Pick a club. If there is no club, pick 'None'"
                         return@Button
                     }
+                    if (schoolSearchText.isNotBlank() && schoolCode == null) {
+                        message = "Pick a school from the list, or leave it empty"
+                        return@Button
+                    }
+                    if (courseSearchText.isNotBlank() && courseId == null) {
+                        message = "Pick a course from the list, or leave it empty"
+                        return@Button
+                    }
                     saving = true
                     message = "Creating user..."
 
-                    AuthManager.createUser(context, email, password, name, clubId) { success, result ->
+                    AuthManager.createUser(
+                        context,
+                        email,
+                        password,
+                        name,
+                        clubId,
+                        school = schoolCode,
+                        course = courseId,
+                        year = year.toIntOrNull() // blank year -> null, not saved
+                    ) { success, result ->
                         saving = false
                         if (success) {
                             message = "Created user (ID: $result)"
                             name = ""
                             email = ""
                             password = ""
+                            schoolCode = null
+                            schoolSearch = TextFieldValue("")
+                            courseId = null
+                            courseSearch = ""
+                            year = ""
                             clubId = null
                             clubSearch = ""
                         } else {
