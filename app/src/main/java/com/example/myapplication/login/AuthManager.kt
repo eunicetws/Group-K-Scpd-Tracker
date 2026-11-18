@@ -67,6 +67,7 @@ object AuthManager {
         school: String? = null,
         course: String? = null,
         year: Int? = null,
+        libNum: Int? = null,
         result: (Boolean, String?) -> Unit
     ) {
         if (name.isBlank()) {
@@ -98,6 +99,7 @@ object AuthManager {
                     school = school,
                     course = course,
                     year = year,
+                    libNum = libNum,
                     scpdPoints = 0,
                     totalEvents = 0,
                     eventReg = emptyList(),
@@ -211,6 +213,7 @@ object AuthManager {
         school: String? = null,
         course: String? = null,
         year: Int? = null,
+        libNum: Int? = null,
         scpdPoints: Int,
         totalEvents: Int,
         eventReg: List<String>,
@@ -232,6 +235,9 @@ object AuthManager {
         }
         if (year != null) {
             data["year"] = year
+        }
+        if (libNum != null) {
+            data["libNum"] = libNum      // library number, e.g. 116372189
         }
         data["scpd_points"] = scpdPoints
         data["total_events"] = totalEvents
