@@ -33,6 +33,7 @@ fun AddUser(modifier: Modifier = Modifier) {
     var email by rememberSaveable { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var year by rememberSaveable { mutableStateOf("") }
+    var libNum by rememberSaveable { mutableStateOf("") }
 
     var message by remember { mutableStateOf("") }
     var saving by remember { mutableStateOf(false) }
@@ -46,7 +47,7 @@ fun AddUser(modifier: Modifier = Modifier) {
     if (noneChosen) {
         searchText = ""
     }
-    // only clubs that match what's typed
+
     val clubMatches = mutableListOf<Pair<String, String>>()
     for (club in clubs) {
         if (club.second.contains(searchText, ignoreCase = true)) {
@@ -59,7 +60,6 @@ fun AddUser(modifier: Modifier = Modifier) {
     var schoolSearch by rememberSaveable(stateSaver = TextFieldValue.Saver) { mutableStateOf(TextFieldValue("")) }
     var schoolDropdown by remember { mutableStateOf(false) }
     val schoolSearchText = schoolSearch.text.trim()
-    // school already picked: show all schools, still typing: only schools that match
     val schoolMatches = mutableListOf<School>()
     for (school in schools) {
         if (schoolCode != null) {
@@ -73,8 +73,7 @@ fun AddUser(modifier: Modifier = Modifier) {
     var courseSearch by rememberSaveable { mutableStateOf("") }
     var courseDropdown by remember { mutableStateOf(false) }
     val courseSearchText = courseSearch.trim()
-    var schoolCourses by remember { mutableStateOf<List<Course>>(emptyList()) } // courses of the chosen school
-    // only courses that match what's typed
+    var schoolCourses by remember { mutableStateOf<List<Course>>(emptyList()) }
     val courseMatches = mutableListOf<Course>()
     for (course in schoolCourses) {
         if ((course.courseID + " - " + course.courseName).contains(courseSearchText, ignoreCase = true)) {
@@ -136,7 +135,6 @@ fun AddUser(modifier: Modifier = Modifier) {
                 OutlinedTextField(
                     value = schoolSearch,
                     onValueChange = { newSearch ->
-                        // only clear the school if the text changed, not just the cursor/highlight
                         if (newSearch.text != schoolSearch.text) {
                             schoolCode = null
                             schoolDropdown = true
@@ -146,7 +144,7 @@ fun AddUser(modifier: Modifier = Modifier) {
                     label = { Text("School") },
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                     placeholder = { Text("School") },
-                    trailingIcon = { //Click v to open dropdown
+                    trailingIcon = {
                         IconButton(onClick = {
                             schoolDropdown = !schoolDropdown
                         }) {
@@ -176,11 +174,11 @@ fun AddUser(modifier: Modifier = Modifier) {
                     properties = PopupProperties(focusable = false, dismissOnClickOutside = false),
                     modifier = Modifier.heightIn(max = 200.dp)
                 ) {
-                    for ((code, name1) in schoolMatches) { // show school and record school code
+                    for ((code, name1) in schoolMatches) {
                         DropdownMenuItem(
                             text = { Text("$code - $name1") },
                             onClick = {
-                                if (code != schoolCode) { // new school, clear old course
+                                if (code != schoolCode) {
                                     courseId = null
                                     courseSearch = ""
                                     schoolCourses = emptyList()
@@ -191,7 +189,7 @@ fun AddUser(modifier: Modifier = Modifier) {
                             }
                         )
                     }
-                    if (schoolMatches.isEmpty() && schoolSearchText.isNotBlank()) { // nothing matches what's typed
+                    if (schoolMatches.isEmpty() && schoolSearchText.isNotBlank()) {
                         DropdownMenuItem(
                             text = { Text("No matching school") },
                             onClick = {},
@@ -207,7 +205,7 @@ fun AddUser(modifier: Modifier = Modifier) {
                     onValueChange = { newSearch ->
                         courseSearch = newSearch
                         courseId = null
-                        if (!courseDropdown) { // only load when the dropdown opens, not every letter
+                        if (!courseDropdown) {
                             CourseManager.getCourse(schoolID = schoolCode, activeFilter = true) { list, error ->
                                 schoolCourses = list
                                 if (error != null) {
@@ -274,7 +272,7 @@ fun AddUser(modifier: Modifier = Modifier) {
                             }
                         )
                     }
-                    if (courseMatches.isEmpty() && courseSearchText.isNotBlank()) { // nothing matches what's typed
+                    if (courseMatches.isEmpty() && courseSearchText.isNotBlank()) {
                         DropdownMenuItem(
                             text = { Text("No matching course") },
                             onClick = {},
@@ -302,6 +300,23 @@ fun AddUser(modifier: Modifier = Modifier) {
                 modifier = Modifier.fillMaxWidth()
             )
 
+            OutlinedTextField(
+                value = libNum,
+                onValueChange = { newLibNum ->
+                    var digits = ""
+                    for (letter in newLibNum) {
+                        if (letter.isDigit()) {
+                            digits += letter
+                        }
+                    }
+                    libNum = digits
+                },
+                label = { Text("Library number") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
+                modifier = Modifier.fillMaxWidth()
+            )
+
             Box {
                 OutlinedTextField(
                     value = clubSearch,
@@ -311,9 +326,9 @@ fun AddUser(modifier: Modifier = Modifier) {
                         clubDropdown = true
                     },
                     label = { Text("Club") },
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done), // last box
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                     placeholder = { Text("Club name") },
-                    trailingIcon = { //Click v to open dropdown
+                    trailingIcon = {
                         IconButton(onClick = {
                             clubDropdown = !clubDropdown
                         }) {
@@ -386,6 +401,10 @@ fun AddUser(modifier: Modifier = Modifier) {
                         message = "Pick a course from the list, or leave it empty"
                         return@Button
                     }
+                    if (libNum.isNotBlank() && libNum.toIntOrNull() == null) {
+                        message = "Library number is too long"
+                        return@Button
+                    }
                     saving = true
                     message = "Creating user..."
 
@@ -397,7 +416,8 @@ fun AddUser(modifier: Modifier = Modifier) {
                         clubId,
                         school = schoolCode,
                         course = courseId,
-                        year = year.toIntOrNull() // blank year -> null, not saved
+                        year = year.toIntOrNull(),
+                        libNum = libNum.toIntOrNull()
                     ) { success, result ->
                         saving = false
                         if (success) {
@@ -410,6 +430,7 @@ fun AddUser(modifier: Modifier = Modifier) {
                             courseId = null
                             courseSearch = ""
                             year = ""
+                            libNum = ""
                             clubId = null
                             clubSearch = ""
                         } else {
