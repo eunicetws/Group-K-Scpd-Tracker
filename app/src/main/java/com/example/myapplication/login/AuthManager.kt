@@ -33,7 +33,16 @@ object AuthManager {
                     result(false, "Unknown error")
                     return@addOnSuccessListener
                 }
-                saveUser(FirebaseFirestore.getInstance(), user.uid, name, email) { pass, error ->
+                saveUser(
+                    db = FirebaseFirestore.getInstance(),
+                    uid = user.uid,
+                    name = name,
+                    email = email,
+                    scpdPoints = 0,
+                    totalEvents = 0,
+                    eventReg = emptyList(),
+                    eventJoined = emptyList()
+                ) { pass, error ->
                     if (pass) {
                         user.sendEmailVerification()
                         result(true, user.uid)
@@ -54,6 +63,11 @@ object AuthManager {
         password: String,
         name: String,
         clubId: String? = null,
+        clubIdMember: List<String> = emptyList(),
+        school: String? = null,
+        course: String? = null,
+        year: Int? = null,
+        libNum: Int? = null,
         result: (Boolean, String?) -> Unit
     ) {
         if (name.isBlank()) {
@@ -75,7 +89,22 @@ object AuthManager {
                     result(false, "Unknown error")
                     return@addOnSuccessListener
                 }
-                saveUser(FirebaseFirestore.getInstance(firebase), newUser.uid, name, email, clubId) { ok, error ->
+                saveUser(
+                    db = FirebaseFirestore.getInstance(firebase),
+                    uid = newUser.uid,
+                    name = name,
+                    email = email,
+                    clubId = clubId,
+                    clubIdMember = clubIdMember,
+                    school = school,
+                    course = course,
+                    year = year,
+                    libNum = libNum,
+                    scpdPoints = 0,
+                    totalEvents = 0,
+                    eventReg = emptyList(),
+                    eventJoined = emptyList()
+                ) { ok, error ->
                     if (ok) {
                         NFirebase.signOut()   // admin is still logged in
                         result(true, newUser.uid)
@@ -180,14 +209,40 @@ object AuthManager {
         name: String,
         email: String,
         clubId: String? = null,
+        clubIdMember: List<String> = emptyList(),
+        school: String? = null,
+        course: String? = null,
+        year: Int? = null,
+        libNum: Int? = null,
+        scpdPoints: Int,
+        totalEvents: Int,
+        eventReg: List<String>,
+        eventJoined: List<String>,
         onDone: (Boolean, String?) -> Unit
     ) {
-        val data = HashMap<String, String>()
+        val data = HashMap<String, Any>()
         data["name"] = name.trim()
         data["email"] = email.trim()
-        if (clubId != null && clubId.isNotBlank()) {
+        if (!clubId.isNullOrBlank()) {
             data["club"] = clubId
         }
+        data["clubIdMember"] = clubIdMember
+        if (!school.isNullOrBlank()) {
+            data["school"] = school       // school code, e.g. MCOMP
+        }
+        if (!course.isNullOrBlank()) {   // course id, e.g. MCOMP002
+            data["course"] = course.trim()
+        }
+        if (year != null) {
+            data["year"] = year
+        }
+        if (libNum != null) {
+            data["libNum"] = libNum      // library number, e.g. 116372189
+        }
+        data["scpd_points"] = scpdPoints
+        data["total_events"] = totalEvents
+        data["event_reg"] = eventReg
+        data["event_joined"] = eventJoined
 
         db.collection("users").document(uid)
             .set(data)

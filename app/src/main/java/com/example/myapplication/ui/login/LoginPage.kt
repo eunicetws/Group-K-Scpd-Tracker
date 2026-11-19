@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.*
 import com.example.myapplication.R
 import com.example.myapplication.Role
 import com.example.myapplication.login.AuthManager
-import com.example.myapplication.ui.components.Header
+import com.example.myapplication.ui.components.HeaderLogin
 import com.example.myapplication.ui.theme.LightBlue
 import com.example.myapplication.ui.theme.Navy
 import com.example.myapplication.ui.theme.Roboto
@@ -50,7 +50,7 @@ fun LoginPage(
             .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Header()
+        HeaderLogin()
 
         Column( // Body
             modifier = Modifier
