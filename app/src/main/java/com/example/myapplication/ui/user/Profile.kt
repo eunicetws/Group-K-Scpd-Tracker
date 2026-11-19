@@ -27,6 +27,7 @@ import com.example.myapplication.R
 import com.example.myapplication.courses.CourseManager
 import com.example.myapplication.login.AuthManager
 import com.example.myapplication.ui.components.Header
+import com.example.myapplication.ui.components.Loading
 import com.example.myapplication.ui.theme.LightBlue
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import com.example.myapplication.ui.theme.Navy
@@ -163,72 +164,73 @@ fun ProfileContent(
     ) {
         Header()
 
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp, vertical = 20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            if (profile == null) {
-                if (message.isNotEmpty()) {
+        if (profile == null && message.isEmpty()) {
+            // still loading
+            Loading(modifier = Modifier.weight(1f))
+        } else {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp, vertical = 20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                if (profile == null) {
                     InfoText(message, MaterialTheme.colorScheme.error)
                 } else {
-                    CircularProgressIndicator(color = Navy)
-                }
-            } else {
-                Text(profile.name, style = MaterialTheme.typography.titleLarge, color = Color.Black)
-                Spacer(modifier = Modifier.height(8.dp))
-                InfoText("Student ID: " + profile.studentID)
-                InfoText("Library Number: " + profile.libraryNumber)
+                    Text(profile.name, style = MaterialTheme.typography.titleLarge, color = Color.Black)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    InfoText("Student ID: " + profile.studentID)
+                    InfoText("Library Number: " + profile.libraryNumber)
 
-                SectionDivider()
+                    SectionDivider()
 
-                TitleText("Course and Year:")
-                Spacer(modifier = Modifier.height(4.dp))
-                InfoText(profile.courseName)
-                InfoText("Year " + profile.year)
+                    TitleText("Course and Year:")
+                    Spacer(modifier = Modifier.height(4.dp))
+                    InfoText(profile.courseName)
+                    InfoText("Year " + profile.year)
 
-                SectionDivider()
+                    SectionDivider()
 
-                TitleText("Total Scpd Points: " + profile.scpdPoints)
-                Spacer(modifier = Modifier.height(4.dp))
-                InfoText("Total Events Joined: " + profile.totalEvents)
+                    TitleText("Total Scpd Points: " + profile.scpdPoints)
+                    Spacer(modifier = Modifier.height(4.dp))
+                    InfoText("Total Events Joined: " + profile.totalEvents)
 
-                SectionDivider()
+                    SectionDivider()
 
-                EventSection(
-                    title = "Events you have Registered",
-                    events = profile.eventsRegistered,
-                    onArrowClick = onRegisteredClick
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                EventSection(
-                    title = "Events You Have Previously Joined",
-                    events = profile.eventsJoined,
-                    onArrowClick = onJoinedClick
-                )
+                    EventSection(
+                        title = "Events you have Registered",
+                        events = profile.eventsRegistered,
+                        onArrowClick = onRegisteredClick
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    EventSection(
+                        title = "Events You Have Previously Joined",
+                        events = profile.eventsJoined,
+                        onArrowClick = onJoinedClick
+                    )
 
-                SectionDivider()
+                    SectionDivider()
 
-                Button(
-                    onClick = onSignOut,
-                    modifier = Modifier.size(width = 125.dp, height = 52.dp),
-                    shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Pink80,
-                        contentColor = Color.Black
-                    ),
-                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
-                    border = BorderStroke(1.5.dp, Navy)
-                ) {
-                    TitleText("Sign Out")
-                }
+                    Button(
+                        onClick = onSignOut,
+                        modifier = Modifier.size(width = 125.dp, height = 52.dp),
+                        shape = RoundedCornerShape(50),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Pink80,
+                            contentColor = Color.Black
+                        ),
+                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp),
+                        border = BorderStroke(1.5.dp, Navy)
+                    ) {
+                        TitleText("Sign Out")
+                    }
 
-                if (message.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(10.dp))
-                    InfoText(message, MaterialTheme.colorScheme.error)
+                    if (message.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(10.dp))
+                        InfoText(message, MaterialTheme.colorScheme.error)
+                    }
                 }
             }
         }
