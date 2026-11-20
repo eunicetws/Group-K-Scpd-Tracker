@@ -36,16 +36,7 @@ fun ViewAllClubsPage(
     //Screen layout
     Column(Modifier.fillMaxSize().background(Color.White)) {
         //Top app header
-        Header(
-            actions = {
-                Text(
-                    "Clubs & Society",
-                    color = Color.White,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium
-                )
-            }
-        )
+        Header()
         //Search bar and filter button row
         Row(
             modifier = Modifier

@@ -10,7 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -137,7 +137,7 @@ private fun EventSection(title: String, events: List<Event>) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(title, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            Icon(Icons.Default.KeyboardArrowRight, contentDescription = "See all $title")
+            Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = "See all $title")
         }
         Spacer(Modifier.height(10.dp))
         LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
