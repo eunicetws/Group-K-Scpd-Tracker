@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.*
 import androidx.compose.ui.tooling.preview.*
@@ -64,6 +65,47 @@ fun HeaderLogin(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             content = actions
+        )
+    }
+}
+
+@Composable
+fun HeaderBack(
+    modifier: Modifier = Modifier,
+    onBackClick: () -> Unit = {}
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(Navy)
+            .statusBarsPadding()
+            .fillMaxHeight(0.08f)
+            .padding(horizontal = 20.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Box(
+            modifier = Modifier
+                .size(36.dp)
+                .clickable {
+                    onBackClick()
+                },
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.icon_arrowdown),
+                contentDescription = "Back",
+                modifier = Modifier
+                    .size(24.dp)
+                    .rotate(90f),
+                tint = Color.White
+            )
+        }
+
+        Image(
+            painter = painterResource(R.drawable.logo_scpd_white),
+            contentDescription = "sCPD logo",
+            modifier = Modifier.fillMaxHeight(0.5f)
         )
     }
 }
@@ -130,6 +172,14 @@ fun HeaderPreview() {
 fun HeaderLoginPreview() {
     Column(Modifier.fillMaxSize()) {
         HeaderLogin()
+    }
+}
+
+@Preview(name = "Header - Back", showBackground = true, heightDp = 800)
+@Composable
+fun HeaderBackPreview() {
+    Column(Modifier.fillMaxSize()) {
+        HeaderBack()
     }
 }
 

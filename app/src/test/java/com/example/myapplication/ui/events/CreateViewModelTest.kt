@@ -2,6 +2,10 @@ package com.example.myapplication.ui.events
 
 import com.example.myapplication.events.EventField
 import com.example.myapplication.events.EventForm
+import com.example.myapplication.events.EventSession
+import com.example.myapplication.events.FileKind
+import com.example.myapplication.events.FileUpload
+import com.example.myapplication.events.PosterUpload
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
@@ -16,13 +20,17 @@ class CreateEventViewModelTest {
         var clubId: String? = null
         var title: String? = null
         var capacity: Int? = null
+        var posters: List<PosterUpload> = emptyList()
+        var sessions = 0
         var callback: ((Boolean, String?) -> Unit)? = null
 
-        val call: CreateEventCall = { club, title, _, _, _, _, capacity, _, result ->
+        val call: CreateEventCall = { club, event, posters, _, result ->
             calls++
             this.clubId = club
-            this.title = title
-            this.capacity = capacity
+            this.title = event.title
+            this.capacity = event.capacity
+            this.posters = posters
+            this.sessions = event.sessions.size
             callback = result
         }
     }
@@ -30,16 +38,24 @@ class CreateEventViewModelTest {
     private val fake = FakeCreate()
     private val vm = CreateEventViewModel(fake.call)
 
+    // Far-future dates so the test does not depend on today's date.
+    private fun date(start: String, end: String): EventSession {
+        val startTime = EventForm.parseDateTime(start)!!
+        val endTime = EventForm.parseDateTime(end)!!
+        check(startTime > System.currentTimeMillis())
+        return EventSession(startTime, endTime)
+    }
+
     private fun fillValidForm() {
-        // Far-future dates so the test does not depend on today's date.
-        val start = EventForm.parseDateTime("2099-12-05 10:00")!!
-        check(start > System.currentTimeMillis())
         vm.onFieldChange(EventField.TITLE, "Hackathon")
         vm.onFieldChange(EventField.VENUE, "Hall A")
-        vm.onFieldChange(EventField.START, "2099-12-05 10:00")
-        vm.onFieldChange(EventField.END, "2099-12-05 18:00")
+        vm.addSessions(listOf(date("2099-12-05 10:00", "2099-12-05 18:00")))
         vm.onFieldChange(EventField.CAPACITY, "50")
         vm.onFieldChange(EventField.POINTS, "5")
+        vm.onFieldChange(EventField.TARGET_PARTICIPANTS, "40")
+        vm.onFieldChange(EventField.CATEGORY, "Technology")
+        vm.onFieldChange(EventField.ACTIVITY_TYPE, "Competition")
+        vm.setEpf(FileUpload(FileKind.EPF, "epf.pdf", "application/pdf", ""))
     }
 
     @Test fun invalidForm_showsErrorsAndNeverCallsTheServer() {
@@ -99,5 +115,37 @@ class CreateEventViewModelTest {
         vm.onFieldChange(EventField.TITLE, "Chess")
         assertNull(vm.ui.errors[EventField.TITLE])
         assertTrue(vm.ui.errors.containsKey(EventField.VENUE))
+    }
+
+    @Test fun noDate_showsDateError() {
+        fillValidForm()
+        vm.removeSession(0)
+        vm.submit("club1")
+        assertEquals(0, fake.calls)
+        assertEquals("Add at least one date", vm.ui.errors[EventField.START])
+    }
+
+    @Test fun missingEpf_blocksSubmit() {
+        fillValidForm()
+        vm.setEpf(null)
+        vm.submit("club1")
+        assertEquals(0, fake.calls)
+        assertEquals("Upload the EPF", vm.ui.errors[EventField.EPF])
+    }
+
+    @Test fun datesAreSaved() {
+        fillValidForm()
+        vm.addSessions(listOf(date("2099-12-06 10:00", "2099-12-06 12:00")))
+        vm.submit("club1")
+        assertEquals(1, fake.calls)
+        assertEquals(2, fake.sessions)
+    }
+
+    @Test fun textInANumberBox_showsError() {
+        fillValidForm()
+        vm.onFieldChange(EventField.CAPACITY, "lots")
+        vm.submit("club1")
+        assertEquals(0, fake.calls)
+        assertTrue(vm.ui.errors.containsKey(EventField.CAPACITY))
     }
 }

@@ -1,0 +1,35 @@
+{
+  "venues": [
+    "Great Hall, Trent Building",
+    "F3C09",
+    "F1A15",
+    "BB80",
+    "Sports Complex",
+    "Library",
+    "Online"
+  ],
+  "categories": [
+    "Social Events",
+    "Academic",
+    "Cultural",
+    "Sports",
+    "Entertainment"
+  ],
+  "activityTypes": [
+    "Workshop",
+    "Talk",
+    "Seminar",
+    "Conference",
+    "Competition",
+    "Performance",
+    "Exhibition",
+    "Festival",
+    "Sports Match",
+    "Training",
+    "Trip",
+    "Volunteering",
+    "Networking",
+    "Social Gathering",
+    "Other"
+  ]
+}
