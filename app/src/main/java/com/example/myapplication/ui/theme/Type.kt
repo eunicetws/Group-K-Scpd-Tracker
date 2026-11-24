@@ -42,6 +42,14 @@ val Typography = Typography(
         fontSize = 22.sp,
         letterSpacing = 0.sp
     ),
+    // Roboto Bold 16, labels on the Create Event page, e.g. "Venue:" (same size as bodyMedium)
+    titleSmall = TextStyle(
+        fontFamily = Roboto,
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    ),
     // Figma: Roboto Regular 20, scaled down for phone, letter spacing 0
     headlineSmall = TextStyle(
         fontFamily = Roboto,
@@ -56,6 +64,65 @@ val Typography = Typography(
         fontSize = 11.sp,
         lineHeight = 14.sp,
         letterSpacing = 0.sp
+    ),
+
+    // The rest are used by Material parts (calendar, dropdown lists, text box labels, dialog buttons)
+    // so that every text in the app comes from this file
+    displayLarge = TextStyle(
+        fontFamily = Roboto,
+        fontWeight = FontWeight.Normal,
+        fontSize = 57.sp,
+        lineHeight = 64.sp,
+        letterSpacing = 0.sp
+    ),
+    displayMedium = TextStyle(
+        fontFamily = Roboto,
+        fontWeight = FontWeight.Normal,
+        fontSize = 45.sp,
+        lineHeight = 52.sp,
+        letterSpacing = 0.sp
+    ),
+    displaySmall = TextStyle(
+        fontFamily = Roboto,
+        fontWeight = FontWeight.Normal,
+        fontSize = 36.sp,
+        lineHeight = 44.sp,
+        letterSpacing = 0.sp
+    ),
+    headlineMedium = TextStyle(
+        fontFamily = Roboto,
+        fontWeight = FontWeight.Normal,
+        fontSize = 28.sp,
+        lineHeight = 36.sp,
+        letterSpacing = 0.sp
+    ),
+    titleMedium = TextStyle(
+        fontFamily = Roboto,
+        fontWeight = FontWeight.Medium,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.15.sp
+    ),
+    bodyLarge = TextStyle(
+        fontFamily = Roboto,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    ),
+    labelLarge = TextStyle(
+        fontFamily = Roboto,
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.1.sp
+    ),
+    labelMedium = TextStyle(
+        fontFamily = Roboto,
+        fontWeight = FontWeight.Medium,
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.5.sp
     )
     /* Other default text styles to override
     titleLarge = TextStyle(
@@ -74,3 +141,23 @@ val Typography = Typography(
     )
     */
 )
+// Text styles with their colour, built from the Typography above
+val LabelStyle = Typography.titleSmall.copy(color = Black)              // "Venue:", "Date, Time:"
+val LabelWhiteStyle = Typography.titleSmall.copy(color = White)         // club initials on navy
+val ValueStyle = Typography.bodyMedium.copy(color = Black)              // typed values and normal text
+val ValueWhiteStyle = Typography.bodyMedium.copy(color = White)         // text on dark backgrounds
+val PlaceholderStyle = Typography.bodyMedium.copy(color = Grey)         // hints like "Event title", "No dates yet"
+val ErrorStyle = Typography.bodySmall.copy(color = Red)                 // error messages
+val SectionTitleStyle = Typography.bodySmall.copy(color = Black)        // "Upload EPF", "Additional Attachments"
+val HeadingStyle = Typography.headlineLarge.copy(color = Black)         // club name
+val ButtonStyle = Typography.bodyMedium                                 // outlined buttons, colour comes from the button
+val PillButtonStyle = Typography.headlineLarge                          // Submit, colour comes from the button
+val DialogTitleStyle = TextStyle(                                       // popup titles, e.g. "Add Date"
+    fontFamily = Roboto,
+    fontWeight = FontWeight.Bold,
+    fontSize = 20.sp,
+    lineHeight = 28.sp,
+    letterSpacing = 0.sp,
+    color = Black
+)
+val DialogHeadlineStyle = Typography.headlineMedium.copy(color = Black)  // picked date at the top of the calendar

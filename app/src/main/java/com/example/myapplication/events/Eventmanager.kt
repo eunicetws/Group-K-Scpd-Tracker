@@ -15,18 +15,18 @@ object EventManager {
     // a club creates an event and submits it for approval. Always starts as PENDING.
     fun createEvent(
         clubId: String,
-        title: String,
-        description: String,
-        venue: String,
-        startTime: Long,
-        endTime: Long,
-        capacity: Int,
-        pointsRequested: Int,
+        event: NewEvent,
+        posters: List<PosterUpload>,
+        files: List<FileUpload>,
         result: (Boolean, String?) -> Unit   // (success, new event id or error message)
     ) {
-        val error = EventRules.validate(title, venue, startTime, endTime, capacity, pointsRequested)
-        if (error != null) {
-            result(false, error)
+        val errors = EventRules.validate(event)
+        for (message in errors.values) {
+            result(false, message)
+            return
+        }
+        if (!EventRules.hasEpf(files)) {
+            result(false, "Upload the EPF")
             return
         }
 
@@ -45,26 +45,72 @@ object EventManager {
                     return@addOnSuccessListener
                 }
 
+                val sessions = mutableListOf<Map<String, Any>>()
+                for ((startTime, endTime) in event.sessions) {
+                    val sessionData = hashMapOf<String, Any>(
+                        "startTime" to startTime,
+                        "endTime" to endTime
+                    )
+                    sessions.add(sessionData)
+                }
+
                 val data = hashMapOf<String, Any>(
                     "clubId" to clubId,
-                    "title" to title.trim(),
-                    "description" to description.trim(),
-                    "venue" to venue.trim(),
-                    "startTime" to startTime,
-                    "endTime" to endTime,
-                    "capacity" to capacity,
+                    "title" to event.title.trim(),
+                    "description" to event.description.trim(),
+                    "venue" to event.venue.trim(),
+                    "startTime" to event.startTime,
+                    "endTime" to event.endTime,
+                    "sessions" to sessions,
+                    "capacity" to event.capacity,
                     "bookedCount" to 0,
-                    "pointsRequested" to pointsRequested,
+                    "pointsRequested" to event.pointsRequested,
+                    "memberPrice" to event.memberPrice,
+                    "nonMemberPrice" to event.nonMemberPrice,
+                    "targetParticipants" to event.targetParticipants,
+                    "category" to event.category,
+                    "activityType" to event.activityType,
+                    "posterCount" to posters.size,
                     "status" to EventStatus.PENDING.name,
                     "createdBy" to uid,
                     "createdAt" to FieldValue.serverTimestamp()
                 )
 
-                db.collection(EVENTS).add(data)
-                    .addOnSuccessListener { ref -> result(true, ref.id) }
-                    .addOnFailureListener { e -> result(false, e.message) }
+                val eventDocument = db.collection(EVENTS).document()
+                val batch = db.batch()
+                batch.set(eventDocument, data)
+
+                for (index in posters.indices) {
+                    val poster = posters[index]
+                    val posterData = hashMapOf<String, Any>(
+                        "image" to poster.image,
+                        "alternativeText" to poster.alternativeText,
+                        "order" to index
+                    )
+                    batch.set(eventDocument.collection("posters").document(index.toString()), posterData)
+                }
+
+                for ((kind, name, mimeType, data1) in files) {
+                    val fileData = hashMapOf<String, Any>(
+                        "kind" to kind.name,
+                        "name" to name,
+                        "mimeType" to mimeType,
+                        "data" to data1
+                    )
+                    batch.set(eventDocument.collection("files").document(), fileData)
+                }
+
+                batch.commit()
+                    .addOnSuccessListener { result(true, eventDocument.id) }
+                    .addOnFailureListener { e ->
+                        print("Error: $e")
+                        result(false, e.message)
+                    }
             }
-            .addOnFailureListener { e -> result(false, e.message) }
+            .addOnFailureListener { e ->
+                print("Error: $e")
+                result(false, e.message)
+            }
     }
 
     // "My events" for a club, with each event's status and rejection reason.
@@ -76,7 +122,10 @@ object EventManager {
                 val events = snapshot.documents.mapNotNull { toEvent(it) }.sortedBy { it.startTime }
                 result(events, null)
             }
-            .addOnFailureListener { e -> result(emptyList(), e.message) }
+            .addOnFailureListener { e ->
+                print("Error: $e")
+                result(emptyList(), e.message)
+            }
     }
 
     // The marketplace only ever receives APPROVED events.
@@ -88,26 +137,32 @@ object EventManager {
                 val events = snapshot.documents.mapNotNull { toEvent(it) }.sortedBy { it.startTime }
                 result(events, null)
             }
-            .addOnFailureListener { e -> result(emptyList(), e.message) }
+            .addOnFailureListener { e ->
+                print("Error: $e")
+                result(emptyList(), e.message)
+            }
     }
 
     // Details can change only while the event is still PENDING. The status is re-read
     // inside a transaction so an admin approving it at the same moment cannot be overwritten.
     fun updateEvent(
         eventId: String,
-        title: String,
-        description: String,
-        venue: String,
-        startTime: Long,
-        endTime: Long,
-        capacity: Int,
-        pointsRequested: Int,
+        event: NewEvent,
         result: (Boolean, String?) -> Unit
     ) {
-        val error = EventRules.validate(title, venue, startTime, endTime, capacity, pointsRequested)
-        if (error != null) {
-            result(false, error)
+        val errors = EventRules.validate(event)
+        for (message in errors.values) {
+            result(false, message)
             return
+        }
+
+        val sessions = mutableListOf<Map<String, Any>>()
+        for ((startTime, endTime) in event.sessions) {
+            val sessionData = hashMapOf<String, Any>(
+                "startTime" to startTime,
+                "endTime" to endTime
+            )
+            sessions.add(sessionData)
         }
 
         val ref = db.collection(EVENTS).document(eventId)
@@ -119,19 +174,28 @@ object EventManager {
             tx.update(
                 ref,
                 mapOf(
-                    "title" to title.trim(),
-                    "description" to description.trim(),
-                    "venue" to venue.trim(),
-                    "startTime" to startTime,
-                    "endTime" to endTime,
-                    "capacity" to capacity,
-                    "pointsRequested" to pointsRequested
+                    "title" to event.title.trim(),
+                    "description" to event.description.trim(),
+                    "venue" to event.venue.trim(),
+                    "startTime" to event.startTime,
+                    "endTime" to event.endTime,
+                    "sessions" to sessions,
+                    "capacity" to event.capacity,
+                    "pointsRequested" to event.pointsRequested,
+                    "memberPrice" to event.memberPrice,
+                    "nonMemberPrice" to event.nonMemberPrice,
+                    "targetParticipants" to event.targetParticipants,
+                    "category" to event.category,
+                    "activityType" to event.activityType
                 )
             )
             null
         }
             .addOnSuccessListener { result(true, null) }
-            .addOnFailureListener { e -> result(false, e.message) }
+            .addOnFailureListener { e ->
+                print("Error: $e")
+                result(false, e.message)
+            }
     }
 
     // The only change allowed after approval. Notifying booked students comes later.
@@ -146,7 +210,10 @@ object EventManager {
             null
         }
             .addOnSuccessListener { result(true, null) }
-            .addOnFailureListener { e -> result(false, e.message) }
+            .addOnFailureListener { e ->
+                print("Error: $e")
+                result(false, e.message)
+            }
     }
 
     private fun readStatus(doc: DocumentSnapshot): EventStatus {
