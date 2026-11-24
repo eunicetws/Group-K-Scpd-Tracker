@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
                     var isLoggedIn by remember { mutableStateOf(false) }
 
                     if (isLoggedIn) {
-                        MainApp()
+                        MainApp(onSignOut = { isLoggedIn = false })
                     } else {
                         LoginPage(
                             onLoginSuccess = { role ->

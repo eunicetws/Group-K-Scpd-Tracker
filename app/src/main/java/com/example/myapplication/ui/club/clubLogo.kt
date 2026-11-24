@@ -9,12 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.myapplication.ui.theme.LabelWhiteStyle
 import com.example.myapplication.ui.theme.Navy
 
 //To show club profile pictures (or fallback to initials if no URL exists)
@@ -35,12 +33,11 @@ fun ClubLogo(club: Club, size: Int, modifier: Modifier = Modifier) {
             modifier = modifier.size(size.dp).clip(CircleShape).background(Navy),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = club.name.firstOrNull()?.toString() ?: "?",
-                color = Color.White,
-                fontSize = (size / 2.5).sp,
-                fontWeight = FontWeight.Bold
-            )
+            var initial = "?"
+            if (club.name.isNotEmpty()) {
+                initial = club.name.substring(0, 1).uppercase()
+            }
+            Text(text = initial, style = LabelWhiteStyle)
         }
     }
 }

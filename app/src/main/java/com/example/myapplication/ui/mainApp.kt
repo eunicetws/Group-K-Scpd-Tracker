@@ -13,10 +13,11 @@ import com.example.myapplication.ui.clubs.ClubDetailPage
 import com.example.myapplication.ui.clubs.ClubsViewModel
 import com.example.myapplication.ui.clubs.ViewAllClubsPage
 import com.example.myapplication.ui.components.Header
+import com.example.myapplication.ui.user.Profile
 
 //The logged-in app, bottom nav bar shared by every tab, and the page for the selected tab
 @Composable
-fun MainApp() {
+fun MainApp(onSignOut: () -> Unit = {}) {
     var tab by rememberSaveable { mutableStateOf(AppTab.Home) }
 
     Scaffold(
@@ -30,7 +31,7 @@ fun MainApp() {
                 AppTab.Calendar -> PlaceholderTab("Calendar") // TODO: calendar page
                 AppTab.Scan -> PlaceholderTab("Scan QR")      // TODO: QR scan page
                 AppTab.Clubs -> ClubsTab()
-                AppTab.Profile -> PlaceholderTab("Profile")   // TODO: profile page
+                AppTab.Profile -> Profile(onSignOut = onSignOut)
             }
         }
     }

@@ -66,8 +66,6 @@ val Typography = Typography(
         letterSpacing = 0.sp
     ),
 
-    // The rest are used by Material parts (calendar, dropdown lists, text box labels, dialog buttons)
-    // so that every text in the app comes from this file
     displayLarge = TextStyle(
         fontFamily = Roboto,
         fontWeight = FontWeight.Normal,
@@ -141,7 +139,7 @@ val Typography = Typography(
     )
     */
 )
-// Text styles with their colour, built from the Typography above
+
 val LabelStyle = Typography.titleSmall.copy(color = Black)              // "Venue:", "Date, Time:"
 val LabelWhiteStyle = Typography.titleSmall.copy(color = White)         // club initials on navy
 val ValueStyle = Typography.bodyMedium.copy(color = Black)              // typed values and normal text
@@ -161,3 +159,4 @@ val DialogTitleStyle = TextStyle(                                       // popup
     color = Black
 )
 val DialogHeadlineStyle = Typography.headlineMedium.copy(color = Black)  // picked date at the top of the calendar
+val SmallWhiteStyle = Typography.labelMedium.copy(color = White)
